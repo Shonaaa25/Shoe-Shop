@@ -1,0 +1,177 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "shoe_cart";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST["shoe_id"];
+    $shoeName = $_POST["shoe_name"];
+    $shoeSize = $_POST["shoe_size"];
+	$quantity = $_POST["quantity"];
+
+    $sql = "INSERT INTO details (shoe_id, shoe_name, shoe_size, quantity) VALUES ('$id', '$shoeName', '$shoeSize','$quantity')";
+
+    if ($conn->query($sql) === TRUE) {
+        header("Location: checkout.php");
+        exit();
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+$conn->close();
+?>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="#" />
+    <title>shoe options</title>
+</head>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    background: #bdb8ed;
+}
+
+.container {
+    text-align: center;
+    height: calc(100vh - var(--header-height));
+}
+
+h1 {
+    height: var(--header-height);
+    background:#bdb8ed;
+    display: flex;
+    align-items: center;
+    color: black;
+    gap: 10px;
+    padding-right: 30px;
+}
+
+header img {
+    filter: invert(1);    
+}
+
+.shoe-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;    
+}
+
+.shoe{
+    height: auto;
+    width: 300px;
+    padding: 4px;
+    box-shadow: 0px 0px 8px 2px var(--border-color);
+    margin: 0 10px;
+    border: 2px solid #f6f5fa;
+    display: flex;
+    flex-direction: column; 
+}
+
+.shoe-image img {
+    max-width: 100%; 
+    height: auto;
+}
+
+.shoe-text {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    background-color: #f6f5fa;
+    padding: 10px; /* Add some padding for better visibility */
+}
+.h2{
+	color: white;
+}
+.label{
+	color: white;
+}
+
+</style>
+<body>
+    <h1>Shoe Options</h1>
+    <ul id="shoeList"></ul>
+
+<form action="shoe_options.php" method="post">
+    <div class="container" name="shoeId" id="shoeId" >
+        <div id="shoe-container" class="shoe-container">
+            <div class="shoe" onclick="selectProduct('Product 1')">
+                <div class="shoe-name">Nike Bubblegum</div>
+                <div class="shoe-image">
+                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+					</div>
+                <div class="shoe-text">
+                    <ul>
+                        <h3>bubblegum Nike AF1</h3>
+                        <p>R1750</p>
+                    </ul>
+                </div>
+            </div>
+<div class="shoe" onclick="selectProduct('Product 2')">
+            <div class="shoe-title">Nike jordans</div>
+            <div class="shoe-image">
+                <img src="https://images.unsplash.com/photo-1597045566677-8cf032ed6634?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8Mnx8fGVufDB8fHx8fA%3D%3D">
+				</div>
+            <div class="shoe-text">
+                <ul>
+                    <h3>Red Nike Jordans</h3>
+                    <p>R1900</lp>
+                </ul>
+            </div>
+        </div>
+		<div class="shoe"onclick="selectProduct('Product 3')">
+            <div class="shoe-title">Nike Tennis Shoes</div>
+            <div class="shoe-image">
+                <img src="https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MTZ8fHxlbnwwfHx8fHw%3D">
+            </div>
+            <div class="shoe-text">
+                <ul>
+                    <h3>Nike Tennis Shoes</h3>
+                    <p>R1980</p>
+                </ul>
+            </div>
+        </div>
+		<div class="shoe" onclick="selectProduct('Product 4')">
+            <div class="shoe-title">metalic Nike Shoes </div>
+            <div class="shoe-image">
+                <img src="https://images.unsplash.com/photo-1576229086948-cfba99afcca5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MTh8fHxlbnwwfHx8fHw%3D">
+				</div>
+            <div class="shoe-text">
+                <ul>
+                    <h3>metalic Nike Shoes </h3>
+                    <p>R1900</p>
+                </ul>
+            </div>
+        </div>
+        </div>
+
+        <input type="hidden" name="selectedProduct" id="selectedProduct">
+
+        <button type="submit" id="checkoutBtn" disabled> <a href="checkout.php">Proceed to Checkout</a></button>
+    </form>
+
+    <script>
+        function selectProduct(productName) {
+            // Set the selected product in the hidden field
+            document.getElementById('selectedProduct').value = productName;
+
+            // Enable the checkout button
+            document.getElementById('checkoutBtn').disabled = false;
+        }
+    </script>
+	</body>
+</html>
